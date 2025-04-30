@@ -15,6 +15,7 @@ float xp = timeSettingZoneSize/3;
 float tSize = round((xp*.9)/2);
 
 Timer timer;
+int count;
 
 int startCount;
 
@@ -73,7 +74,8 @@ void draw(){
   text(timer.getTimeSeconds(), width/2, height/2);
   
   
-  if(timeSetting) TimeSetting();
+  if(timeSetting) timer.setTime(timeToSeconds(TimeSetting()[0], TimeSetting()[1], TimeSetting()[2]));
+  
   
 }
 
@@ -88,9 +90,6 @@ int[] secondsToTime(int seconds){
   return new int[]{hrs, min, sec};
 }
 
-void setTimeScreen(){
-  
-}
 
 void mouseDragged(){
   if(timeSetting){
