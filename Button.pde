@@ -1,4 +1,5 @@
 class Button {
+  public PVector panelPosition;
   public PVector position;
   public PVector size;
   public boolean centeredText = true;
@@ -14,6 +15,7 @@ class Button {
   public String text = "";
   private float darkCol = 50;
   private float darkerCol = 100;
+  public PImage image;
 
   public Button(PVector position, PVector size, String text) {
     this.position = position;
@@ -21,25 +23,43 @@ class Button {
     this.text = text;
   }
   
-  public Button(float x, float y, float w, float h, String text) {
+  //public Button(float x, float y, float w, float h, String text) {
+  //  this.position = new PVector(x, y);
+  //  this.size = new PVector(w, h);
+  //  this.text = text;
+  //}
+  
+  public Button(float x, float y, float w, float h, String pi) {
     this.position = new PVector(x, y);
     this.size = new PVector(w, h);
-    this.text = text;
+    this.image = loadImage(pi);
+  }
+  
+  void SetPanel(float x, float y) {
+    panelPosition = new PVector(x, y);
   }
 
   void Display() {
     Logic();
-    stroke(this.strokeColor);
-    strokeWeight(1);
-    this.clickedColor = color(red(fillColor) - darkerCol, green(fillColor) - darkerCol, blue(fillColor) - darkerCol); 
-    this.hoveredColor = color(red(fillColor) - darkCol, green(fillColor) - darkCol, blue(fillColor) - darkCol);
-    rect(position.x-size.x/2, position.y-size.y/2, size.x, size.y);
-    fill(textColor);
-    if(centeredText){
-      textAlign(CENTER,CENTER);
-      text(text, position.x, position.y);
-    } else
-      text(text, position.x - size.x/2, position.y);
+    if (this.image == null) {
+      stroke(this.strokeColor);
+      strokeWeight(1);
+      this.clickedColor = color(red(fillColor) - darkerCol, green(fillColor) - darkerCol, blue(fillColor) - darkerCol);
+      this.hoveredColor = color(red(fillColor) - darkCol, green(fillColor) - darkCol, blue(fillColor) - darkCol);
+      rect(position.x, position.y, size.x, size.y);
+      fill(textColor);
+      if (centeredText) {
+        textAlign(CENTER, CENTER);
+        text(text, position.x + size.x/2, position.y + size.y/2);
+      } else
+        text(text, position.x, position.y + size.y/2);
+    } else if (this.image != null) {
+      pushStyle();
+      this.clickedColor = color(255-darkerCol);
+      this.hoveredColor = color(255-darkCol);
+      image(image, position.x, position.y, size.x, size.y);
+      popStyle();
+    }
   }
 
   void Logic() {
@@ -47,13 +67,16 @@ class Button {
     if (Collisions() && mousePressed) {
       isClicked = true;
       fill(clickedColor);
+      tint(clickedColor);
     } else if (Collisions()) {
-      if(isClicked2) endClick = true;
+      if (isClicked2) endClick = true;
       isClicked = false;
       isHovered = true;
       fill(hoveredColor);
+      tint(hoveredColor);
     } else {
-      fill(fillColor); 
+      fill(fillColor);
+      tint(255);
       isHovered = false;
       isClicked = false;
     }
@@ -61,10 +84,19 @@ class Button {
   }
 
   public boolean Collisions() {
-    if (mouseX > position.x - size.x/2 && mouseX < position.x + size.x/2 && mouseY < position.y + size.y/2 && mouseY > position.y - size.y/2) {
-      return true;
-    } else {
-      return false;
+    if (panelPosition == null) {
+      if (mouseX > position.x && mouseX < position.x + size.x && mouseY < position.y + size.y && mouseY > position.y) {
+        return true;
+      } else {
+        return false;
+      }
+    }else {
+      PVector pPosition = panelPosition.copy().add(position);
+      if (mouseX > pPosition.x && mouseX < pPosition.x + size.x && mouseY < pPosition.y + size.y && mouseY > pPosition.y) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 }

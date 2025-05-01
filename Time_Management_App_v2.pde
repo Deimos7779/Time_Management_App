@@ -1,6 +1,3 @@
-Button start;
-Button pause;
-Button reset;
 Button setTime;
 Button bTimeSet;
 
@@ -15,6 +12,7 @@ float xp = timeSettingZoneSize/3;
 float tSize = round((xp*.9)/2);
 
 Timer timer;
+float standardSize = 300;
 int count;
 
 int startCount;
@@ -27,63 +25,48 @@ int passingMillis;
 
 
 
-void setup(){
+void setup() {
   size(432, 768);
-  start = new Button(width/2, height/2-50, 100, 30, "Start");
-  pause = new Button(width/2, height/2-250, 100, 30, "Pause");
-  reset = new Button(width/2, height/2-150, 100, 30, "Reset");
-  setTime = new Button(width/2, height/2 + 150, 100, 30, "Set Time");
-  bTimeSet = new Button(width/2, height/2 + 200, 100, 30, "Done");
-  
+  setTime = new Button(new PVector(width/2, height/2 + 150), new PVector(100, 30), "Set Time");
+  bTimeSet = new Button(new PVector(width/2, height/2 + 200), new PVector(100, 30), "Done");
+
   float os = (width-timeSettingZoneSize)/2;
-  
-    c1 = new Column(24, os +sh, xp);
-  c2 = new Column(60,os +xp+ sh, xp);
+
+  c1 = new Column(24, os +sh, xp);
+  c2 = new Column(60, os +xp+ sh, xp);
   c3 = new Column(60, os +xp*2+sh, xp);
-  
-  
-  timer = new Timer(60);
-  
+
+  float timerXpos = (width-standardSize)/2;
+  timer = new Timer(60, timerXpos, 50, standardSize);
 }
 
-void draw(){
-  
+void draw() {
+
   frameRate(60);
-  
+
   background(51);
   
-  start.Display();
-  if(start.endClick){
-    timer.start();
-  }
-  pause.Display();
-  if(pause.endClick){
-    timer.pause();
-  }
-  reset.Display();
-  if(reset.endClick){
-    timer.setTime(60);
-  }
-  
+  timer.Display(); //<>//
+
   setTime.Display();
-  if(setTime.endClick){
+  if (setTime.endClick) {
     timeSetting = true;
   }
-  
-  
-  text(timer.getTimeSeconds(), width/2, height/2);
-  
-  
-  if(timeSetting) timer.setTime(timeToSeconds(TimeSetting()[0], TimeSetting()[1], TimeSetting()[2]));
-  
-  
+
+
+  //text(timer.getTimeSeconds(), width/2, height/2);
+
+
+  if (timeSetting){
+    timer.setTime(timeToSeconds(TimeSetting()[0], TimeSetting()[1], TimeSetting()[2]));
+  }
 }
 
-int timeToSeconds(int seconds, int minutes, int hours){
+int timeToSeconds(int seconds, int minutes, int hours) {
   return seconds + minutes*60 + hours * 3600;
 }
 
-int[] secondsToTime(int seconds){
+int[] secondsToTime(int seconds) {
   int hrs = floor(seconds/3600);
   int min = floor((seconds-hrs*3600)/60);
   int sec = (seconds-hrs*3600-min*60);
@@ -91,12 +74,12 @@ int[] secondsToTime(int seconds){
 }
 
 
-void mouseDragged(){
-  if(timeSetting){
+void mouseDragged() {
+  if (timeSetting) {
     if (mouseY > 0 && mouseY < height) {
-    c1.CheckMouse();
-    c2.CheckMouse();
-    c3.CheckMouse();
-  }
+      c1.CheckMouse();
+      c2.CheckMouse();
+      c3.CheckMouse();
+    }
   }
 }

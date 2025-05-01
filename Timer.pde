@@ -7,8 +7,13 @@ class Timer {
   Button start;
   Button pause;
   Button reset;
-  Button setTime;
+  Button delete;
+  Button offset;
   
+  PVector position;
+  float size;
+  int seconds;
+  float buttonSize;
 
   float elapsedTime;
   float currTimeMillis;
@@ -25,21 +30,87 @@ class Timer {
     this(1);
   }
 
-  //Constructor: accepts the running time of the Timer in seconds.
   Timer(int timeInSeconds)
   {
-    start = new Button(width/2, height/2-50, 100, 30, "Start");
-    pause = new Button(width/2, height/2-250, 100, 30, "Pause");
-    reset = new Button(width/2, height/2-150, 100, 30, "Reset");
-    setTime = new Button(width/2, height/2 + 150, 100, 30, "Set Time");
+    setTime(timeInSeconds);
+  }
+
+  //Constructor: accepts the running time of the Timer in seconds.
+  Timer(int timeInSeconds, float x, float y, float s)
+  {
+    this.position = new PVector(x, y);
+    this.size = s;
+    this.buttonSize = size/7;
+    this.start = new Button(size/2-buttonSize/2, size -60, buttonSize, buttonSize, "StartIcon.png");
+    this.pause = new Button(size/2-buttonSize*1.5 -10, size -60, buttonSize, buttonSize, "PauseIcon.png");
+    this.reset = new Button(size/2 + buttonSize/2 +10, size -60, buttonSize, buttonSize, "ResetIcon.png");
+    this.delete = new Button(10, 10, buttonSize, buttonSize, "DeleteIcon.png");
+    this.offset = new Button(size-10-buttonSize, 10, buttonSize, buttonSize, "OffsetIcon.png");
     setTime(timeInSeconds);
     isStarted = false;
     isPaused = true;
-  }
-  
-  void Display(){
     
+    start.SetPanel(position.x, position.y);
+   pause.SetPanel(position.x, position.y);
+   reset.SetPanel(position.x, position.y);
+   delete.SetPanel(position.x, position.y);
+   offset.SetPanel(position.x, position.y);
   }
+
+  void Display() { //<>//
+    rect(position.x, position.y, size, size);
+
+    //Display all the necessary buttons
+    push();
+    translate(position.x, position.y);
+    start.Display();
+    pause.Display();
+    reset.Display();
+    delete.Display();
+    offset.Display();
+    pop();
+
+    //display points to separate the three clock numbers.
+    push();
+    translate(position.x, position.y);
+    stroke(255);
+    strokeWeight(5);
+    point(size/3, size/2 - 20);
+    point(size/3, size/2 + 20);
+    point(size/3*2, size/2 - 20);
+    point(size/3*2, size/2 + 20);
+    pop();
+
+    //display the numbers of the clock
+    int sec, min, hrs;
+    sec = secondsToTime(seconds)[0];
+    min = secondsToTime(seconds)[1];
+    hrs = secondsToTime(seconds)[2];
+    push();
+    translate(position.x, position.y);
+    fill(255);
+    float textSize = size/3*.75;
+    textSize(textSize);
+    text(nf(sec, 2), size/6, size/2);
+    text(nf(min, 2), size/6+size/3, size/2);
+    text(nf(hrs, 2), size/6+(size/3)*2, size/2);
+    pop();
+  }
+
+  void Update() {
+    seconds = floor(timer.getTimeSeconds());
+    
+    if (start.endClick) {
+      timer.start();
+    }
+    if (pause.endClick) {
+      timer.pause();
+    }
+    if (reset.endClick) {
+      timer.setTime(60);
+    }
+  }
+
 
   //Begins the Timer countdown
   void start()
