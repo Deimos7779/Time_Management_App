@@ -36,6 +36,10 @@ class Timer {
     isStarted = false;
     isPaused = true;
   }
+  
+  void Display(){
+    
+  }
 
   //Begins the Timer countdown
   void start()
@@ -107,7 +111,7 @@ class Timer {
       pauseBufferMillis = elapsed - pauseTotalMillis;
     }
 
-    println(currTimeMillis, pauseBufferMillis, elapsed);
+    //println(currTimeMillis, pauseBufferMillis, elapsed);
     return timeInSeconds;
   }
 

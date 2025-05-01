@@ -37,7 +37,7 @@ class Column {
       mouseOffset = mouseSnap;
     }
 
-    number = round(total/2-sMouseOffset/tSize);
+    number = round(total-sMouseOffset/tSize);
     number %= total;
     if(number < 0) number += total;
     pop();

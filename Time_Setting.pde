@@ -39,5 +39,6 @@ int[] TimeSetting(){
     timeSetting = false;
   }
   
+  println(c1.number, c2.number, c3.number);
   return new int[]{c1.number, c2.number, c3.number};
 }
