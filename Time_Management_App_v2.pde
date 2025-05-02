@@ -47,6 +47,7 @@ void draw() {
   background(51);
   
   timer.Display(); //<>//
+  timer.Update();
 
   setTime.Display();
   if (setTime.endClick) {
@@ -58,8 +59,9 @@ void draw() {
 
 
   if (timeSetting){
-    timer.setTime(timeToSeconds(TimeSetting()[0], TimeSetting()[1], TimeSetting()[2]));
+    timer.setTime(timeToSeconds(TimeSetting()[2], TimeSetting()[1], TimeSetting()[0]));
   }
+  
 }
 
 int timeToSeconds(int seconds, int minutes, int hours) {

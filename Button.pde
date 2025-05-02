@@ -49,6 +49,7 @@ class Button {
       rect(position.x, position.y, size.x, size.y);
       fill(textColor);
       if (centeredText) {
+        textSize(12);
         textAlign(CENTER, CENTER);
         text(text, position.x + size.x/2, position.y + size.y/2);
       } else

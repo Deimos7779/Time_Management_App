@@ -102,12 +102,13 @@ class Timer {
     
     if (start.endClick) {
       timer.start();
+      println("start");
     }
     if (pause.endClick) {
       timer.pause();
     }
     if (reset.endClick) {
-      timer.setTime(60);
+      timer.setTime(totalTimeMillis);
     }
   }
 
@@ -138,6 +139,7 @@ class Timer {
   void setTime(float timeInSeconds)
   {
     totalTimeMillis = timeInSeconds * 1000;
+    //seconds = int(timeInSeconds);
     isStarted = false;
     isPaused = true;
   }
